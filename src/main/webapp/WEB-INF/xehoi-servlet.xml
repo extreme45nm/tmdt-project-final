@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation=" http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<mvc:resources mapping="/resources/**" location="/resources/theme1/"
+		cache-period="31556926" />
+	<mvc:annotation-driven />
+	<context:component-scan base-package="edu.java.web.controller" />
+
+	<!-- MAPPER -->
+	<bean id="carMapper" class="edu.java.web.model.CarMapper" />
+	<bean id="manufacturerMapper" class="edu.java.web.model.ManufacturerMapper" />
+	<bean id="promotionMapper" class="edu.java.web.model.PromotionMapper" />
+	<bean id="specificationMapper" class="edu.java.web.model.SpecificationMapper" />
+	<bean id="utilMapper" class="edu.java.web.model.UtilMapper" />
+	<bean id="sellerMapper" class="edu.java.web.model.SellerMapper" />
+	<!-- END -->
+
+
+
+
+
+	<!--MANUFACTURER -->
+	<bean id="manufacturerDAO" class="edu.java.web.dao.ManufacturerDAO">
+		<property name="dataSource" ref="dataSource" />
+		<property name="insertSQL"
+			value="INSERT INTO Manufacturer(id,name) 
+				VALUES(?,?)" />
+	</bean>
+	<bean
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject">
+			<ref bean="manufacturerDAO" />
+		</property>
+		<property name="targetMethod">
+			<value>createTableManufacturer</value>
+		</property>
+		<property name="arguments">
+			<list>
+				<value>Manufacturer</value>
+				<value>
+					IF OBJECT_ID('Manufacturer') IS NULL
+					begin
+					CREATE TABLE Manufacturer(
+					id bigint primary key,
+					name varchar(50) not null
+					)
+					end
+				</value>
+			</list>
+		</property>
+	</bean>
+	<!-- END MANUFACTURER -->
+
+	<!-- SELLER -->
+	<bean id="sellerDAO" class="edu.java.web.dao.SellerDAO">
+		<property name="dataSource" ref="dataSource" />
+		<property name="insertSQL"
+			value="INSERT INTO Seller(id,name,age,accountNumber,number,address) 
+				VALUES(?,?,?,?,?,?)" />
+	</bean>
+	<bean
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject">
+			<ref bean="sellerDAO" />
+		</property>
+		<property name="targetMethod">
+			<value>createTableSeller</value>
+		</property>
+		<property name="arguments">
+			<list>
+				<value>Seller</value>
+				<value>
+					IF OBJECT_ID('Seller') IS NULL
+					begin
+					CREATE TABLE Seller(
+					id int primary key,
+					name varchar(50) not null,
+					age int,
+					accountNumber bigint not null,
+					number bigint not null,
+					address varchar(50) not null
+					)
+					end
+				</value>
+			</list>
+		</property>
+	</bean>
+	<!-- END SELLER -->
+
+	<!-- CAR -->
+	<bean id="carDAO" class="edu.java.web.dao.CarDAO">
+		<property name="dataSource" ref="dataSource" />
+		<property name="insertSQL"
+			value="INSERT INTO Car(id,name,manufacturerId,year,sellerId,status,price) 
+				VALUES(?,?,?,?,?,?,?)" />
+	</bean>
+	<bean
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject">
+			<ref bean="carDAO" />
+		</property>
+		<property name="targetMethod">
+			<value>createTableCar</value>
+		</property>
+		<property name="arguments">
+			<list>
+				<value>Car</value>
+				<value>
+					IF OBJECT_ID('Car') IS NULL
+					begin
+					CREATE TABLE Car(
+					id int primary key,
+					name varchar(50) not null,
+					manufacturerId bigint not null,
+					year int not null,
+					sellerId int not null,
+					status bit,
+					price int,
+					FOREIGN KEY (manufacturerId) REFERENCES Manufacturer(id),
+					FOREIGN KEY (sellerId) REFERENCES Seller(id)
+					)
+					end
+				</value>
+			</list>
+		</property>
+	</bean>
+	<!-- END CAR -->
+
+
+	<!-- PROMOTION -->
+	<bean id="promotionDAO" class="edu.java.web.dao.PromotionDAO">
+		<property name="dataSource" ref="dataSource" />
+		<property name="insertSQL"
+			value="INSERT INTO Promotion(carId,registerFee,insurance,discount) 
+				VALUES(?,?,?,?)" />
+	</bean>
+	<bean
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject">
+			<ref bean="promotionDAO" />
+		</property>
+		<property name="targetMethod">
+			<value>createTablePromotion</value>
+		</property>
+		<property name="arguments">
+			<list>
+				<value>Promotion</value>
+				<value>
+					IF OBJECT_ID('Promotion') IS NULL
+					begin
+					CREATE TABLE Promotion(
+					carId int not null,
+					registerFee bit,
+					insurance bit,
+					discount real,
+					FOREIGN KEY (carId) REFERENCES Car(id)
+					)
+					end
+				</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- END PROMOTION -->
+
+	<!-- UTIL -->
+	<bean id="utilDAO" class="edu.java.web.dao.UtilDAO">
+		<property name="dataSource" ref="dataSource" />
+		<property name="insertSQL"
+			value="INSERT INTO Util(carId,airbag,soundsystem,wheel) 
+				VALUES(?,?,?,?)" />
+	</bean>
+	<bean
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject">
+			<ref bean="utilDAO" />
+		</property>
+		<property name="targetMethod">
+			<value>createTableUtil</value>
+		</property>
+		<property name="arguments">
+			<list>
+				<value>Util</value>
+				<value>
+					IF OBJECT_ID('Util') IS NULL
+					begin
+					CREATE TABLE Util(
+					carId int not null,
+					airbag bit,
+					soundsystem bit,
+					wheel bit,
+					FOREIGN KEY (CarId) REFERENCES Car(id)
+					)
+					end
+				</value>
+			</list>
+		</property>
+	</bean>
+	<!-- END UTIL -->
+
+	<!-- SPECIFICATION -->
+	<bean id="specificationDAO" class="edu.java.web.dao.SpecificationDAO">
+		<property name="dataSource" ref="dataSource" />
+		<property name="insertSQL"
+			value="INSERT INTO Specification(carId,type,seat,engine,torque) 
+				VALUES(?,?,?,?,?)" />
+	</bean>
+	<bean
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject">
+			<ref bean="specificationDAO" />
+		</property>
+		<property name="targetMethod">
+			<value>createTableSpecification</value>
+		</property>
+		<property name="arguments">
+			<list>
+				<value>Specification</value>
+				<value>
+					IF OBJECT_ID('Specification') IS NULL
+					begin
+					CREATE TABLE Specification(
+					carId int not null,
+					type varchar(50),
+					seat int,
+					engine real,
+					torque real,
+					FOREIGN KEY (CarId) REFERENCES Car(id)
+					)
+					end
+				</value>
+			</list>
+		</property>
+	</bean>
+	<!-- END SPEC -->
+
+	<!-- OTHERs -->
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="10000000" />
+	</bean>
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+		<property name="url"
+			value="jdbc:sqlserver://localhost:49854;databaseName=topcar;create=true" />
+		<property name="username" value="sa" />
+		<property name="password" value="congminh" />
+	</bean>
+
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="message" />
+	</bean>
+	<!-- END -->
+</beans>

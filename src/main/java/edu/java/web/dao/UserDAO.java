@@ -5,11 +5,11 @@ import edu.java.web.model.User;
 public class UserDAO {
 
 	
-	public void registerNewUserAccount(final User user){
-		
+	public User registerNewUserAccount(final User user){
+		return null;
 	}
 	
-	private boolean emailExist(String email){
+	public boolean emailExist(String email){
 		User user = findByEmail(email); 
 		if(user == null){
 			return false;
@@ -18,6 +18,10 @@ public class UserDAO {
 	}
 	
 	public User findByEmail(String email){
+		return null;
+	}
+	
+	public User addUser(final User user){
 		return null;
 	}
 }

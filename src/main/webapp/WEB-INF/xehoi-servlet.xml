@@ -27,6 +27,7 @@
 
 
 
+
 	<!--MANUFACTURER -->
 	<bean id="manufacturerDAO" class="edu.java.web.dao.ManufacturerDAO">
 		<property name="dataSource" ref="dataSource" />

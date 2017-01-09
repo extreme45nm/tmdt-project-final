@@ -1,9 +1,11 @@
+edu\java\validation\EmailValidator.class
 edu\java\web\dao\UtilDAO$1.class
 edu\java\web\dao\PromotionDAO.class
 edu\java\web\dao\SpecificationDAO.class
 edu\java\web\model\Seller.class
 edu\java\web\dao\SellerDAO$1.class
 edu\java\web\model\ManufacturerMapper.class
+edu\java\spring\error\UserAlreadyExistException.class
 edu\java\web\controller\ManufacturerController.class
 edu\java\web\model\SpecificationMapper.class
 edu\java\web\controller\SellerController.class
@@ -11,7 +13,6 @@ edu\java\web\model\Manufacturer.class
 edu\java\web\model\CarMapper.class
 edu\java\web\dao\ManufacturerDAO.class
 edu\java\web\model\PromotionMapper.class
-edu\java\web\controller\RegistrationController.class
 edu\java\web\model\UtilMapper.class
 edu\java\web\dao\ManufacturerDAO$1.class
 edu\java\web\controller\PromotionController.class
@@ -22,6 +23,7 @@ edu\java\web\model\Util.class
 edu\java\web\model\SellerMapper.class
 edu\java\validation\ValidEmail.class
 edu\java\web\dao\CarDAO.class
+edu\java\spring\service\UserServiceImpl.class
 edu\java\web\controller\CarController.class
 edu\java\web\model\Promotion.class
 edu\java\web\model\MemberMapper.class
@@ -34,4 +36,6 @@ edu\java\web\model\Member.class
 edu\java\web\model\User.class
 edu\java\web\model\Specification.class
 edu\java\web\dao\SpecificationDAO$1.class
+edu\java\spring\service\UserService.class
 edu\java\web\controller\UtilController.class
+edu\java\web\dao\UserDAO.class
